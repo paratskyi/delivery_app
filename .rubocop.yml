@@ -1,0 +1,23 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - '**/node_modules/**/*'
+    - 'bin/**'
+    - 'spec/rails_helper.rb'
+    - 'test/channels/application_cable/connection_test.rb'
+    - 'test/test_helper.rb'
+    - 'config/**/*'
+    - 'db/**/*'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Layout/LineLength:
+  IgnoredPatterns: ['(\A|\s)#']
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
