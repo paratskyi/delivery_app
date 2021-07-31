@@ -1,0 +1,9 @@
+<h1 class="text-center mt-4">
+  <%= @courier.name %>'s profile
+</h1>
+<div class="text-center mt-4">
+  <%= link_to "Edit your profile", edit_courier_path(@courier), class: "btn btn-outline-info" %>
+</div>
+<div class="text-center mt-4">
+  <%= link_to 'Return to couriers', :couriers, class: "text-info" %>
+</div>
