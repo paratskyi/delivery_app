@@ -45,7 +45,7 @@ RSpec.describe 'Couriers', type: :request do
     end
 
     it 'should show courier correctly' do
-      #TODO add test after adding assotiations
+      # TODO: add test after adding assotiations
     end
   end
 
@@ -84,8 +84,8 @@ RSpec.describe 'Couriers', type: :request do
 
     it 'should show courier correctly' do
       subject
-      expect(response.body).to include "#{courier.name}"
-      expect(response.body).to include "#{courier.email}"
+      expect(response.body).to include courier.name.to_s
+      expect(response.body).to include courier.email.to_s
     end
   end
 
