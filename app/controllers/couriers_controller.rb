@@ -1,11 +1,15 @@
 class CouriersController < ApplicationController
   before_action :set_category, only: %i[show update edit]
+  before_action :set_courier, only: %i[show]
 
   def index
     @couriers = Courier.all
   end
 
-  def show; end
+  def show
+    @packages = @courier.packages
+    @package = current_courier.packages.build
+  end
 
   def new
     @courier = Courier.new
@@ -40,5 +44,9 @@ class CouriersController < ApplicationController
 
   def set_category
     @courier = Courier.find(params[:id])
+  end
+
+  def set_courier
+    session[:courier_id] = @courier.id
   end
 end

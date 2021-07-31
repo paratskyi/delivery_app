@@ -1,9 +1,22 @@
-<h1 class="text-center mt-4">
-  <%= @courier.name %>'s profile
-</h1>
-<div class="text-center mt-4">
-  <%= link_to "Edit your profile", edit_courier_path(@courier), class: "btn btn-outline-info" %>
-</div>
-<div class="text-center mt-4">
-  <%= link_to 'Return to couriers', :couriers, class: "text-info" %>
+<div class="row">
+  <aside class="col-md-4">
+    <h1 class="text-center mt-4">
+      <%= @courier.name %>'s profile
+    </h1>
+    <div class="text-center mt-4">
+      <%= link_to "Edit your profile", edit_courier_path(@courier), class: "btn btn-outline-info" %>
+    </div>
+    <div class="text-center mt-4">
+      <%= link_to 'Return to couriers', :couriers, class: "text-info" %>
+    </div>
+    <%= render 'shared/package_form' %>
+  </aside>
+  <div class="col-md-8">
+    <% if @courier.packages.any? %>
+      <h3>Packages (<%= @courier.packages.count %>)</h3>
+      <ol class="packages">
+        <%= render @packages %>
+      </ol>
+    <% end %>
+  </div>
 </div>
