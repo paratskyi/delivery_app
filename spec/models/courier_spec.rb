@@ -8,6 +8,10 @@ RSpec.describe Courier, type: :model do
     expect(courier.email).to eq 'foo@example.com'
   end
 
+  it 'has many packages' do
+    expect(courier).to respond_to :packages
+  end
+
   context 'with validation' do
     it 'should be valid' do
       expect(courier).to be_valid
