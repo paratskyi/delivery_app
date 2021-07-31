@@ -9,8 +9,12 @@ RSpec.describe Package, type: :model do
     end
 
     context 'tracking_number' do
-      it 'is invalid without a name' do
+      it 'is invalid without a tracking_number' do
         expect(FactoryBot.build(:package, tracking_number: nil)).not_to be_valid
+      end
+
+      it 'does not allow duplicate tracking_number' do
+        expect(FactoryBot.build(:package, tracking_number: package.tracking_number)).not_to be_valid
       end
     end
 
