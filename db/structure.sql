@@ -23,6 +23,18 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 
 
+--
+-- Name: delivery_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.delivery_status AS ENUM (
+    'new',
+    'processing',
+    'delivered',
+    'cancelled'
+);
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -58,11 +70,11 @@ CREATE TABLE public.couriers (
 
 CREATE TABLE public.packages (
     tracking_number character varying,
-    delivery_status boolean DEFAULT false,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    courier_id uuid NOT NULL
+    courier_id uuid NOT NULL,
+    delivery_status public.delivery_status DEFAULT 'new'::public.delivery_status NOT NULL
 );
 
 
@@ -162,6 +174,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210731112246'),
 ('20210731141801'),
 ('20210917165626'),
-('20210917171827');
+('20210917171827'),
+('20210918101501');
 
 

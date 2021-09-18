@@ -13,7 +13,7 @@ RSpec.describe "Packages", type: :request do
     let(:package_params) do
       {
         tracking_number: '1111',
-        delivery_status: true,
+        delivery_status: :new_package,
         courier_id: courier.id
       }
     end
@@ -28,7 +28,7 @@ RSpec.describe "Packages", type: :request do
         expect((package_attributes)).to match hash_including(
                                                 'id' => created_package.id,
                                                 'tracking_number' => '1111',
-                                                'delivery_status' => true,
+                                                'delivery_status' => 'new_package',
                                                 'courier_id' => courier.id
                                               )
         expect(subject).to redirect_to courier_path(courier)
@@ -47,7 +47,7 @@ RSpec.describe "Packages", type: :request do
           expect((package_attributes)).to match hash_including(
                                                   'id' => created_package.id,
                                                   'tracking_number' => '1111',
-                                                  'delivery_status' => false,
+                                                  'delivery_status' => 'new_package',
                                                   'courier_id' => courier.id
                                                 )
           expect(subject).to redirect_to courier_path(courier)

@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :package do
     association :courier
-    tracking_number { "MyString" }
-    delivery_status { false }
+    sequence(:tracking_number) { |n| "MyString #{n}" }
   end
 end
