@@ -74,7 +74,8 @@ CREATE TABLE public.packages (
     updated_at timestamp(6) without time zone NOT NULL,
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     courier_id uuid NOT NULL,
-    delivery_status public.delivery_status DEFAULT 'new'::public.delivery_status NOT NULL
+    delivery_status public.delivery_status DEFAULT 'new'::public.delivery_status NOT NULL,
+    estimated_delivery_time timestamp without time zone DEFAULT (now() + '01:00:00'::interval) NOT NULL
 );
 
 
@@ -175,6 +176,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210731141801'),
 ('20210917165626'),
 ('20210917171827'),
-('20210918101501');
+('20210918101501'),
+('20210921195410');
 
 
