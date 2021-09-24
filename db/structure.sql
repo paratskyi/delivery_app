@@ -75,7 +75,8 @@ CREATE TABLE public.packages (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     courier_id uuid NOT NULL,
     delivery_status public.delivery_status DEFAULT 'new'::public.delivery_status NOT NULL,
-    estimated_delivery_time timestamp without time zone DEFAULT (now() + '01:00:00'::interval) NOT NULL
+    estimated_delivery_time timestamp without time zone DEFAULT (now() + '01:00:00'::interval) NOT NULL,
+    CONSTRAINT check_tracking_number CHECK (((tracking_number)::text ~ similar_escape('%YA[0-9]{8}AA%'::text, NULL::text)))
 );
 
 
@@ -177,6 +178,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210917165626'),
 ('20210917171827'),
 ('20210918101501'),
-('20210921195410');
+('20210921195410'),
+('20210924172341');
 
 
