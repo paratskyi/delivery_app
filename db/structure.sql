@@ -40,6 +40,42 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: active_admin_comments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.active_admin_comments (
+    id bigint NOT NULL,
+    namespace character varying,
+    body text,
+    resource_type character varying,
+    resource_id bigint,
+    author_type character varying,
+    author_id bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: active_admin_comments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.active_admin_comments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: active_admin_comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.active_admin_comments_id_seq OWNED BY public.active_admin_comments.id;
+
+
+--
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -72,7 +108,12 @@ CREATE TABLE public.delivery_managers (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     enabled boolean DEFAULT true,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone
 );
 
 
@@ -99,6 +140,21 @@ CREATE TABLE public.packages (
 CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: active_admin_comments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_admin_comments ALTER COLUMN id SET DEFAULT nextval('public.active_admin_comments_id_seq'::regclass);
+
+
+--
+-- Name: active_admin_comments active_admin_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.active_admin_comments
+    ADD CONSTRAINT active_admin_comments_pkey PRIMARY KEY (id);
 
 
 --
@@ -142,6 +198,27 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: index_active_admin_comments_on_author; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_admin_comments_on_author ON public.active_admin_comments USING btree (author_type, author_id);
+
+
+--
+-- Name: index_active_admin_comments_on_namespace; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_admin_comments_on_namespace ON public.active_admin_comments USING btree (namespace);
+
+
+--
+-- Name: index_active_admin_comments_on_resource; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_active_admin_comments_on_resource ON public.active_admin_comments USING btree (resource_type, resource_id);
+
+
+--
 -- Name: index_couriers_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -153,6 +230,20 @@ CREATE INDEX index_couriers_on_created_at ON public.couriers USING btree (create
 --
 
 CREATE UNIQUE INDEX index_couriers_on_email ON public.couriers USING btree (email);
+
+
+--
+-- Name: index_delivery_managers_on_email; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_delivery_managers_on_email ON public.delivery_managers USING btree (email);
+
+
+--
+-- Name: index_delivery_managers_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_delivery_managers_on_reset_password_token ON public.delivery_managers USING btree (reset_password_token);
 
 
 --
@@ -197,9 +288,15 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210731141801'),
 ('20210917165626'),
 ('20210917171827'),
+<<<<<<< HEAD
 ('20210918101501'),
 ('20210921195410'),
 ('20210924172341'),
 ('20210925110743');
+=======
+('20210925110743'),
+('20210925120140'),
+('20210925120143');
+>>>>>>> 0553428 (US3, Install and configure Active Admin administration framework)
 
 
