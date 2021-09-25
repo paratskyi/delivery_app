@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe DeliveryManager, type: :model do
-
-  describe 'fields' do
-    it { should have_db_column(:enabled).of_type(:boolean).with_options(default: true) }
-  end
-
   describe '#create' do
     subject { DeliveryManager.create(create_params) }
 
