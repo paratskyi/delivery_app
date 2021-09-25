@@ -65,6 +65,18 @@ CREATE TABLE public.couriers (
 
 
 --
+-- Name: delivery_managers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.delivery_managers (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    enabled boolean DEFAULT true,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
 -- Name: packages; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -103,6 +115,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 ALTER TABLE ONLY public.couriers
     ADD CONSTRAINT couriers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: delivery_managers delivery_managers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.delivery_managers
+    ADD CONSTRAINT delivery_managers_pkey PRIMARY KEY (id);
 
 
 --
@@ -179,6 +199,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210917171827'),
 ('20210918101501'),
 ('20210921195410'),
-('20210924172341');
+('20210924172341'),
+('20210925110743');
 
 
