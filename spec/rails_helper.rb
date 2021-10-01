@@ -92,6 +92,9 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+
+  config.include Devise::Test::IntegrationHelpers, type: :system
+  config.include Devise::Test::IntegrationHelpers, type: :request
 end
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
