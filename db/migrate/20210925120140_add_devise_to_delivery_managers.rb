@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AddDeviseToDeliveryManagers < ActiveRecord::Migration[6.1]
   def self.up
     change_table :delivery_managers do |t|

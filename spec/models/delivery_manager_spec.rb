@@ -4,7 +4,7 @@ RSpec.describe DeliveryManager, type: :model do
   describe '#create' do
     subject { DeliveryManager.create(create_params) }
 
-    let(:create_params) { FactoryBot.attributes_for(:delivery_manager) }
+    let(:create_params) { attributes_for(:delivery_manager) }
 
     shared_examples :create_delivery_manager_with_correct_attributes do
       let(:enabled) { true }
@@ -25,7 +25,7 @@ RSpec.describe DeliveryManager, type: :model do
       let(:errors) { nil }
 
       it 'does not creates DeliveryManager with correct errors' do
-        expect { subject }.to change { DeliveryManager.count }.by(0)
+        expect { subject }.not_to change { DeliveryManager.count }
         expect(subject.errors.full_messages).to match_array(errors)
       end
     end
@@ -53,12 +53,12 @@ RSpec.describe DeliveryManager, type: :model do
   context '#update' do
     subject { delivery_manager.update(update_params) }
 
-    let!(:delivery_manager) { FactoryBot.create(:delivery_manager) }
+    let!(:delivery_manager) { create(:delivery_manager) }
     let(:update_params) { {} }
 
     shared_examples :update_delivery_manager_with_correct_attributes do
-      it 'creates DeliveryManager with correct attributes' do
-        expect { subject }.to change { DeliveryManager.count }.by(0)
+      it 'updates DeliveryManager with correct attributes' do
+        expect { subject }.not_to change { DeliveryManager.count }
         expect(delivery_manager.errors.messages).to be_empty
         expect(delivery_manager).to have_attributes(
           id: be_a_kind_of(String),
@@ -75,5 +75,16 @@ RSpec.describe DeliveryManager, type: :model do
 
       it_behaves_like :update_delivery_manager_with_correct_attributes
     end
+  end
+
+  describe 'fields' do
+    it { should have_db_column(:email).of_type(:string).with_options(null: false) }
+    it { should have_db_column(:encrypted_password).of_type(:string).with_options(null: false) }
+    it { should have_db_index(:email).unique }
+  end
+
+  describe 'validations' do
+    it { should_not allow_value(nil).for(:email) }
+    it { should_not allow_value(nil).for(:password) }
   end
 end

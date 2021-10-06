@@ -1,9 +1,4 @@
 class ApplicationController < ActionController::Base
-<<<<<<< HEAD
-  def current_courier
-    @current_courier ||= Courier.find(session[:courier_id]) if session[:courier_id]
-  end
-=======
   add_flash_types :warning
 
   def current_courier
@@ -17,5 +12,4 @@ class ApplicationController < ActionController::Base
     end
     super
   end
->>>>>>> 0553428 (US3, Install and configure Active Admin administration framework)
 end
