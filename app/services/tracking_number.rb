@@ -1,5 +1,4 @@
 class TrackingNumber
-
   def initialize(tracking_number)
     @tracking_number = tracking_number
   end
@@ -14,7 +13,7 @@ class TrackingNumber
   end
 
   def self.generate_digest_sequence
-    rand(10_000_000..10**8)
+    rand(10_000_000..(10**8))
   end
 
   def to_s
