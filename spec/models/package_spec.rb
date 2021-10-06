@@ -188,11 +188,31 @@ RSpec.describe Package, type: :model do
     end
   end
 
-  describe 'associations' do
-    let(:package) { create(:package) }
-
-    it 'has many posts' do
-      expect(package).to respond_to :courier
+  describe 'fields' do
+    it do
+      should define_enum_for(:delivery_status).with_values(
+        new: 'new',
+        processing: 'processing',
+        delivered: 'delivered',
+        cancelled: 'cancelled'
+      ).with_prefix(:status).backed_by_column_of_type(:enum)
     end
+    it { should have_db_column(:estimated_delivery_time).of_type(:datetime).with_options(null: false) }
+    it { should have_db_column(:delivery_status).of_type(:enum).with_options(null: false, default: 'new') }
+    it { should have_db_column(:tracking_number).of_type(:string) }
+    it { should have_db_index(:tracking_number).unique }
+  end
+
+  describe 'validations' do
+    before do
+      allow_any_instance_of(Package).to receive(:set_tracking_number)
+    end
+
+    it { should_not allow_value(nil).for(:tracking_number) }
+    it { should allow_value(*Package.delivery_statuses.keys).for(:delivery_status) }
+  end
+
+  describe 'associations' do
+    it { should belong_to(:courier) }
   end
 end
