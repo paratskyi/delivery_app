@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Package, type: :model do
-  let(:courier) { FactoryBot.create(:courier) }
+  let(:courier) { create(:courier) }
 
   describe '#create' do
     subject { Package.create(create_params) }
@@ -30,7 +30,7 @@ RSpec.describe Package, type: :model do
       let(:errors) { nil }
 
       it 'does not creates Package' do
-        expect { subject }.to change { Package.count }.by(0)
+        expect { subject }.not_to change { Package.count }
         expect(subject.errors.full_messages).to match_array(errors)
       end
     end
@@ -91,7 +91,7 @@ RSpec.describe Package, type: :model do
     context 'with duplicated tracking_number' do
       before do
         allow_any_instance_of(Package).to receive(:generate_tracking_number).and_return('YA00000001AA')
-        FactoryBot.create(:package, courier: courier)
+        create(:package, courier: courier)
       end
 
       it_behaves_like :does_not_create_package do
@@ -103,14 +103,14 @@ RSpec.describe Package, type: :model do
   describe '#update' do
     subject { package.update(update_params) }
 
-    let!(:package) { FactoryBot.create(:package) }
+    let!(:package) { create(:package) }
     let(:update_params) { { courier: courier } }
 
     shared_examples :update_package_with_correct_attributes do
       let(:delivery_status) { 'new' }
 
       it 'updates Package with correct attributes' do
-        expect { subject }.to change { Package.count }.by(0)
+        expect { subject }.not_to change { Package.count }
         expect(package.errors.messages).to be_empty
         expect(package.reload).to have_attributes(
           tracking_number: match(/\AYA[0-9]{8}AA\z/),
@@ -128,7 +128,7 @@ RSpec.describe Package, type: :model do
       let(:errors) { nil }
 
       it 'does not updates Package' do
-        expect { subject }.to change { Package.count }.by(0)
+        expect { subject }.not_to change { Package.count }
         expect(package.errors.full_messages).to match_array(errors)
       end
     end
@@ -179,7 +179,7 @@ RSpec.describe Package, type: :model do
     end
 
     context 'with duplicated tracking_number' do
-      let!(:another_package) { FactoryBot.create(:package, courier: courier) }
+      let!(:another_package) { create(:package, courier: courier) }
       let(:update_params) { super().merge(tracking_number: another_package.tracking_number) }
 
       it_behaves_like :does_not_update_package do
@@ -189,7 +189,7 @@ RSpec.describe Package, type: :model do
   end
 
   describe 'associations' do
-    let(:package) { FactoryBot.create :package }
+    let(:package) { create(:package) }
 
     it 'has many posts' do
       expect(package).to respond_to :courier
