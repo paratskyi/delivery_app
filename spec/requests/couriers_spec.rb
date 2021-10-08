@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe 'Couriers', type: :request do
-  let!(:courier) { FactoryBot.create(:courier) }
+  let!(:courier) { create(:courier) }
 
   describe 'GET /index' do
     subject do
       get couriers_path
     end
 
-    let!(:couriers) { FactoryBot.create_list(:courier, 10) }
+    let!(:couriers) { create_list(:courier, 10) }
 
     it 'returns http success' do
       subject
@@ -120,7 +120,7 @@ RSpec.describe 'Couriers', type: :request do
         let(:errors) { nil }
 
         it 'does not create Courier' do
-          expect { subject }.to change { Courier.count }.by(0)
+          expect { subject }.not_to change { Courier.count }
           expect(response).to have_http_status(:success)
           expect(response.body).to include 'The following errors prevented the courier from being saved'
         end
@@ -194,7 +194,7 @@ RSpec.describe 'Couriers', type: :request do
         end
 
         before do
-          FactoryBot.create(:courier)
+          create(:courier)
         end
 
         include_examples :courier_does_not_create do
@@ -219,7 +219,7 @@ RSpec.describe 'Couriers', type: :request do
 
     context 'when valid' do
       it 'should update Courier successfully' do
-        expect { subject }.to change { Courier.count }.by(0)
+        expect { subject }.not_to change { Courier.count }
         expect((courier_attributes)).to match hash_including(
           'id' => courier.id,
           'name' => 'new name',
@@ -234,7 +234,7 @@ RSpec.describe 'Couriers', type: :request do
         let(:errors) { nil }
 
         it 'does not update Courier' do
-          expect { subject }.to change { Courier.count }.by(0)
+          expect { subject }.not_to change { Courier.count }
           expect(response).to have_http_status(:success)
           expect(response.body).to include 'The following errors prevented the courier from being saved'
         end
@@ -307,7 +307,7 @@ RSpec.describe 'Couriers', type: :request do
           }
         end
 
-        let!(:another_courier) { FactoryBot.create(:courier) }
+        let!(:another_courier) { create(:courier) }
 
         include_examples :courier_does_not_create do
           let(:errors) { ['Email has already been taken'] }

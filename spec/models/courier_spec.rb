@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Courier, type: :model do
-  let(:courier) { FactoryBot.create(:courier) }
+  let(:courier) { create(:courier) }
 
   it 'email should be saved as lowercase' do
-    courier = FactoryBot.create(:courier, email: 'Foo@ExAMPle.CoM')
+    courier = create(:courier, email: 'Foo@ExAMPle.CoM')
     expect(courier.email).to eq 'foo@example.com'
   end
 
@@ -19,25 +19,25 @@ RSpec.describe Courier, type: :model do
 
     context 'name' do
       it 'is invalid without a name' do
-        expect(FactoryBot.build(:courier, name: nil)).not_to be_valid
+        expect(build(:courier, name: nil)).not_to be_valid
       end
 
       it 'is invalid with too long name' do
-        expect(FactoryBot.build(:courier, name: 'a' * 51)).not_to be_valid
+        expect(build(:courier, name: 'a' * 51)).not_to be_valid
       end
     end
 
     context 'email' do
       it 'is invalid without an email' do
-        expect(FactoryBot.build(:courier, email: nil)).not_to be_valid
+        expect(build(:courier, email: nil)).not_to be_valid
       end
 
       it 'does not allow duplicate emails' do
-        expect(FactoryBot.build(:courier, email: courier.email)).not_to be_valid
+        expect(build(:courier, email: courier.email)).not_to be_valid
       end
 
       it 'is invalid with too long email' do
-        expect(FactoryBot.build(:courier, email: "#{'a' * 244}@example.com")).not_to be_valid
+        expect(build(:courier, email: "#{'a' * 244}@example.com")).not_to be_valid
       end
 
       it 'allow mixcase valid email' do
@@ -45,7 +45,7 @@ RSpec.describe Courier, type: :model do
                           first.last@foo.jp alice+bob@baz.cn]
 
         valid_emails.each do |email|
-          expect(FactoryBot.build(:courier, email: email)).to be_valid
+          expect(build(:courier, email: email)).to be_valid
         end
       end
 
@@ -54,7 +54,7 @@ RSpec.describe Courier, type: :model do
                             user.name@example. foo@bar_baz.com foo@bar+baz.com]
 
         invalid_emails.each do |email|
-          expect(FactoryBot.build(:courier, email: email)).not_to be_valid
+          expect(build(:courier, email: email)).not_to be_valid
         end
       end
     end

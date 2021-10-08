@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe "Packages", type: :request do
-  let!(:courier) { FactoryBot.create(:courier) }
+RSpec.describe 'Packages', type: :request do
+  let!(:courier) { create(:courier) }
 
   describe 'POST #create' do
     subject do
@@ -13,7 +13,7 @@ RSpec.describe "Packages", type: :request do
     let(:package_params) do
       {
         tracking_number: '1111',
-        delivery_status: true,
+        delivery_status: :new_package,
         courier_id: courier.id
       }
     end
@@ -26,11 +26,11 @@ RSpec.describe "Packages", type: :request do
       it 'should create Package successfully' do
         expect { subject }.to change { Package.count }.by(1)
         expect((package_attributes)).to match hash_including(
-                                                'id' => created_package.id,
-                                                'tracking_number' => '1111',
-                                                'delivery_status' => true,
-                                                'courier_id' => courier.id
-                                              )
+          'id' => created_package.id,
+          'tracking_number' => '1111',
+          'delivery_status' => 'new_package',
+          'courier_id' => courier.id
+        )
         expect(subject).to redirect_to courier_path(courier)
       end
 
@@ -45,11 +45,11 @@ RSpec.describe "Packages", type: :request do
         it 'should create Package successfully' do
           expect { subject }.to change { Package.count }.by(1)
           expect((package_attributes)).to match hash_including(
-                                                  'id' => created_package.id,
-                                                  'tracking_number' => '1111',
-                                                  'delivery_status' => false,
-                                                  'courier_id' => courier.id
-                                                )
+            'id' => created_package.id,
+            'tracking_number' => '1111',
+            'delivery_status' => 'new_package',
+            'courier_id' => courier.id
+          )
           expect(subject).to redirect_to courier_path(courier)
         end
       end
@@ -66,7 +66,7 @@ RSpec.describe "Packages", type: :request do
         end
 
         it 'does not create Package' do
-          expect { subject }.to change { Package.count }.by(0)
+          expect { subject }.not_to change { Package.count }
         end
       end
 
@@ -79,7 +79,7 @@ RSpec.describe "Packages", type: :request do
         end
 
         it 'does not create Package' do
-          expect { subject }.to change { Package.count }.by(0)
+          expect { subject }.not_to change { Package.count }
         end
       end
 
@@ -92,11 +92,11 @@ RSpec.describe "Packages", type: :request do
         end
 
         before do
-          FactoryBot.create(:package)
+          create(:package)
         end
 
         it 'does not create Package' do
-          expect { subject }.to change { Package.count }.by(0)
+          expect { subject }.not_to change { Package.count }
         end
       end
     end
