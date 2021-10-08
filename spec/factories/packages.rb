@@ -1,5 +1,3 @@
 FactoryBot.define do
-  factory :package do
-    association :courier
-  end
+  factory :package do; end
 end

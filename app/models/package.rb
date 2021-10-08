@@ -1,8 +1,6 @@
 class Package < ApplicationRecord
   before_validation { set_tracking_number }
 
-  belongs_to :courier
-
   enum delivery_status: {
     new: 'new',
     processing: 'processing',
@@ -12,7 +10,6 @@ class Package < ApplicationRecord
 
   validates :delivery_status, inclusion: { in: delivery_statuses.keys }
   validates :tracking_number, presence: true, uniqueness: true
-  validates :courier_id, presence: true
 
   private
 

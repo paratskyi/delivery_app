@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Package, type: :model do
-  let(:courier) { create(:courier) }
-
   describe '#create' do
     subject { Package.create(create_params) }
 
-    let(:create_params) { { courier: courier } }
+    let(:create_params) { {  } }
 
     shared_examples :create_package_with_correct_attributes do
       let(:delivery_status) { 'new' }
@@ -19,7 +17,6 @@ RSpec.describe Package, type: :model do
           created_at: be_present,
           updated_at: be_present,
           id: be_a_kind_of(String),
-          courier_id: courier.id,
           delivery_status: delivery_status,
           estimated_delivery_time: be_present
         )
@@ -80,18 +77,10 @@ RSpec.describe Package, type: :model do
       end
     end
 
-    context 'with empty params' do
-      let(:create_params) { {} }
-
-      it_behaves_like :does_not_create_package do
-        let(:errors) { ['Courier must exist', "Courier can't be blank"] }
-      end
-    end
-
     context 'with duplicated tracking_number' do
       before do
         allow_any_instance_of(Package).to receive(:generate_tracking_number).and_return('YA00000001AA')
-        create(:package, courier: courier)
+        create(:package, )
       end
 
       it_behaves_like :does_not_create_package do
@@ -104,7 +93,7 @@ RSpec.describe Package, type: :model do
     subject { package.update(update_params) }
 
     let!(:package) { create(:package) }
-    let(:update_params) { { courier: courier } }
+    let(:update_params) { {  } }
 
     shared_examples :update_package_with_correct_attributes do
       let(:delivery_status) { 'new' }
@@ -117,7 +106,6 @@ RSpec.describe Package, type: :model do
           created_at: be_present,
           updated_at: be_present,
           id: be_a_kind_of(String),
-          courier_id: courier.id,
           delivery_status: delivery_status,
           estimated_delivery_time: be_present
         )
@@ -179,7 +167,7 @@ RSpec.describe Package, type: :model do
     end
 
     context 'with duplicated tracking_number' do
-      let!(:another_package) { create(:package, courier: courier) }
+      let!(:another_package) { create(:package, ) }
       let(:update_params) { super().merge(tracking_number: another_package.tracking_number) }
 
       it_behaves_like :does_not_update_package do
@@ -210,9 +198,5 @@ RSpec.describe Package, type: :model do
 
     it { should_not allow_value(nil).for(:tracking_number) }
     it { should allow_value(*Package.delivery_statuses.keys).for(:delivery_status) }
-  end
-
-  describe 'associations' do
-    it { should belong_to(:courier) }
   end
 end
