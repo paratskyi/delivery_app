@@ -1,8 +1,13 @@
 class ApplicationController < ActionController::Base
+  include Pundit
   add_flash_types :warning
 
   def current_courier
     @current_courier ||= Courier.find(session[:courier_id]) if session[:courier_id]
+  end
+
+  def pundit_user
+    current_delivery_manager
   end
 
   def authenticate_delivery_manager!
