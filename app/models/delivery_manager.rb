@@ -1,0 +1,2 @@
+class DeliveryManager < ApplicationRecord
+end
