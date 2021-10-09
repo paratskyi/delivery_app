@@ -125,4 +125,8 @@ RSpec.describe Courier, type: :model do
     it { should allow_value(*valid_emails).for(:email) }
     it { should validate_uniqueness_of(:email).ignoring_case_sensitivity }
   end
+
+  describe 'associations' do
+    it { should have_many(:packages).through(:package_assignments) }
+  end
 end

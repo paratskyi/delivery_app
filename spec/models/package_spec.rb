@@ -199,4 +199,8 @@ RSpec.describe Package, type: :model do
     it { should_not allow_value(nil).for(:tracking_number) }
     it { should allow_value(*Package.delivery_statuses.keys).for(:delivery_status) }
   end
+
+  describe 'associations' do
+    it { should have_many(:couriers).through(:package_assignments) }
+  end
 end

@@ -118,6 +118,19 @@ CREATE TABLE public.delivery_managers (
 
 
 --
+-- Name: package_assignments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.package_assignments (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    courier_id uuid,
+    package_id uuid,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
 -- Name: packages; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -126,7 +139,6 @@ CREATE TABLE public.packages (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    courier_id uuid,
     delivery_status public.delivery_status DEFAULT 'new'::public.delivery_status NOT NULL,
     estimated_delivery_time timestamp without time zone DEFAULT (now() + '01:00:00'::interval) NOT NULL,
     CONSTRAINT check_tracking_number CHECK (((tracking_number)::text ~ similar_escape('%YA[0-9]{8}AA%'::text, NULL::text)))
@@ -179,6 +191,14 @@ ALTER TABLE ONLY public.couriers
 
 ALTER TABLE ONLY public.delivery_managers
     ADD CONSTRAINT delivery_managers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: package_assignments package_assignments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.package_assignments
+    ADD CONSTRAINT package_assignments_pkey PRIMARY KEY (id);
 
 
 --
@@ -247,10 +267,17 @@ CREATE UNIQUE INDEX index_delivery_managers_on_reset_password_token ON public.de
 
 
 --
--- Name: index_packages_on_courier_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_package_assignments_on_courier_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_packages_on_courier_id ON public.packages USING btree (courier_id);
+CREATE INDEX index_package_assignments_on_courier_id ON public.package_assignments USING btree (courier_id);
+
+
+--
+-- Name: index_package_assignments_on_package_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_package_assignments_on_package_id ON public.package_assignments USING btree (package_id);
 
 
 --
@@ -265,14 +292,6 @@ CREATE INDEX index_packages_on_created_at ON public.packages USING btree (create
 --
 
 CREATE UNIQUE INDEX index_packages_on_tracking_number ON public.packages USING btree (tracking_number);
-
-
---
--- Name: packages fk_rails_180ae67646; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.packages
-    ADD CONSTRAINT fk_rails_180ae67646 FOREIGN KEY (courier_id) REFERENCES public.couriers(id);
 
 
 --
@@ -294,6 +313,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210925110743'),
 ('20210925120140'),
 ('20210925120143'),
-('20211009115506');
+('20211009115506'),
+('20211009121439');
 
 
