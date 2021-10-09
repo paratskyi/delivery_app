@@ -30,6 +30,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'activeadmin', '~> 2.9'
 gem 'devise', '~> 4.8'
+gem 'draper', '~> 4.0', '>= 4.0.2'
 gem 'pundit', '~> 2.1', '>= 2.1.1'
 
 group :development, :test do
