@@ -22,5 +22,4 @@ ActiveAdmin.register Courier do
     end
     f.actions
   end
-
 end

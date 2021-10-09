@@ -127,9 +127,8 @@ RSpec.describe Package, type: :system, js: true do
     let!(:package) { create(:package) }
 
     it 'destroys package successfully' do
-      expect { subject }.to change { Package.count }.by -1
+      expect { subject }.to change { Package.count }.by(-1)
       expect(page).to have_flash_message('Package was successfully destroyed.')
     end
   end
-
 end

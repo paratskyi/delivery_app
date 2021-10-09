@@ -141,9 +141,8 @@ RSpec.describe Courier, type: :system, js: true do
     let!(:courier) { create(:courier) }
 
     it 'destroys courier successfully' do
-      expect { subject }.to change { Courier.count }.by -1
+      expect { subject }.to change { Courier.count }.by(-1)
       expect(page).to have_flash_message('Courier was successfully destroyed.')
     end
   end
-
 end

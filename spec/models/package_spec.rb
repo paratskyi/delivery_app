@@ -80,7 +80,7 @@ RSpec.describe Package, type: :model do
     context 'with duplicated tracking_number' do
       before do
         allow_any_instance_of(Package).to receive(:generate_tracking_number).and_return('YA00000001AA')
-        create(:package, )
+        create(:package)
       end
 
       it_behaves_like :does_not_create_package do
@@ -167,7 +167,7 @@ RSpec.describe Package, type: :model do
     end
 
     context 'with duplicated tracking_number' do
-      let!(:another_package) { create(:package, ) }
+      let!(:another_package) { create(:package) }
       let(:update_params) { super().merge(tracking_number: another_package.tracking_number) }
 
       it_behaves_like :does_not_update_package do

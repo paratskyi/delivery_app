@@ -28,5 +28,4 @@ ActiveAdmin.register Package do
     end
     f.actions
   end
-
 end
