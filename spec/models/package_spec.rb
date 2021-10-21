@@ -99,7 +99,7 @@ RSpec.describe Package, type: :model do
       end
     end
 
-    context 'when update Courier' do
+    context 'when update Package' do
       it_behaves_like :update_record_with_correct_attributes do
         let(:record) { package }
         let(:record_attributes) do
@@ -175,7 +175,8 @@ RSpec.describe Package, type: :model do
         new: 'new',
         processing: 'processing',
         delivered: 'delivered',
-        cancelled: 'cancelled'
+        cancelled: 'cancelled',
+        assigned: 'assigned'
       ).with_prefix(:status).backed_by_column_of_type(:enum)
     end
     it { should have_db_column(:estimated_delivery_time).of_type(:datetime).with_options(null: false) }

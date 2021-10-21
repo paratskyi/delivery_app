@@ -12,6 +12,14 @@ class Courier < ApplicationRecord
 
   private
 
+  scope :free_couriers_for, lambda { |package|
+    if package.courier_ids.empty?
+      Courier.all
+    else
+      Courier.where.not('couriers.id in (?)', package.courier_ids)
+    end
+  }
+
   def downcase_email
     self.email = email.downcase
   end

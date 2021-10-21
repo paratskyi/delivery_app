@@ -8,11 +8,13 @@ class Package < ApplicationRecord
     new: 'new',
     processing: 'processing',
     delivered: 'delivered',
-    cancelled: 'cancelled'
+    cancelled: 'cancelled',
+    assigned: 'assigned'
   }, _prefix: :status
 
   validates :delivery_status, inclusion: { in: delivery_statuses.keys }
   validates :tracking_number, presence: true, uniqueness: true
+  accepts_nested_attributes_for :couriers
 
   private
 
