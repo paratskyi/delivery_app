@@ -45,9 +45,26 @@ RSpec.describe Package, type: :system, js: true do
   describe 'show' do
     subject { visit admin_package_path(package) }
 
-    let!(:package) { create(:package) }
+    let!(:package) { create(:package, package_params) }
+    let(:package_params) { nil }
+
+    it 'does not have "Cancel" action item' do
+      expect(page).not_to have_link('Cancel', href: cancel_package_admin_package_path(package))
+    end
 
     it_behaves_like :render_correct_show_page
+
+    context 'when delivery_status=delivered' do
+      let(:package_params) { { delivery_status: 'delivered' } }
+
+      it 'renders correct show page' do
+        subject
+        expect(page).to have_attribute_row('Delivery status', exact_text: 'Delivered')
+        within '#title_bar .action_items' do
+          expect(page).to have_link('Cancel', href: cancel_package_admin_package_path(package))
+        end
+      end
+    end
   end
 
   describe 'create' do
@@ -110,6 +127,26 @@ RSpec.describe Package, type: :system, js: true do
 
     it_behaves_like :render_correct_show_page do
       let(:delivery_status) { new_delivery_status }
+    end
+  end
+
+  describe 'cancel' do
+    subject do
+      click_link('Cancel')
+    end
+
+    before do
+      visit admin_package_path(package)
+    end
+
+    let!(:package) { create(:package, package_params) }
+    let(:package_params) { { delivery_status: 'delivered' } }
+
+    it 'cancels package successfully' do
+      expect { subject }.not_to change { Package.count }
+      expect(page).to have_flash_message('Package was successfully canceled!')
+      expect(page).to have_attribute_row('Delivery status', exact_text: 'Cancelled')
+      expect(package.reload.delivery_status).to eq 'cancelled'
     end
   end
 
