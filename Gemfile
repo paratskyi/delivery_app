@@ -32,6 +32,7 @@ gem 'activeadmin', '~> 2.9'
 gem 'devise', '~> 4.8'
 gem 'draper', '~> 4.0', '>= 4.0.2'
 gem 'pundit', '~> 2.1', '>= 2.1.1'
+gem 'rswag', '~> 2.4'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
