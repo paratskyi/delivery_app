@@ -4,33 +4,7 @@ RSpec.describe Package, type: :model do
   describe '#create' do
     subject { Package.create(create_params) }
 
-    let(:create_params) { {  } }
-
-    shared_examples :create_package_with_correct_attributes do
-      let(:delivery_status) { 'new' }
-
-      it 'creates Package with correct attributes' do
-        expect { subject }.to change { Package.count }.by(1)
-        expect(subject.errors.messages).to be_empty
-        expect(Package.last).to have_attributes(
-          tracking_number: match(/\AYA[0-9]{8}AA\z/),
-          created_at: be_present,
-          updated_at: be_present,
-          id: be_a_kind_of(String),
-          delivery_status: delivery_status,
-          estimated_delivery_time: be_present
-        )
-      end
-    end
-
-    shared_examples :does_not_create_package do
-      let(:errors) { nil }
-
-      it 'does not creates Package' do
-        expect { subject }.not_to change { Package.count }
-        expect(subject.errors.full_messages).to match_array(errors)
-      end
-    end
+    let(:create_params) { {} }
 
     shared_examples :does_not_create_package_with_raise_error do
       let(:invalid_delivery_status) { nil }
@@ -43,14 +17,34 @@ RSpec.describe Package, type: :model do
     end
 
     context 'with required params' do
-      it_behaves_like :create_package_with_correct_attributes
+      it_behaves_like :create_record_with_correct_attributes do
+        let(:record_attributes) do
+          {
+            tracking_number: match(/\AYA[0-9]{8}AA\z/),
+            created_at: be_present,
+            updated_at: be_present,
+            id: be_a_kind_of(String),
+            delivery_status: 'new',
+            estimated_delivery_time: be_present
+          }
+        end
+      end
     end
 
     context 'with valid delivery_statuses' do
       Package.delivery_statuses.each_key do |delivery_status|
-        it_behaves_like :create_package_with_correct_attributes do
-          let(:delivery_status) { delivery_status }
+        it_behaves_like :create_record_with_correct_attributes do
           let(:create_params) { super().merge(delivery_status: delivery_status) }
+          let(:record_attributes) do
+            {
+              tracking_number: match(/\AYA[0-9]{8}AA\z/),
+              created_at: be_present,
+              updated_at: be_present,
+              id: be_a_kind_of(String),
+              delivery_status: delivery_status,
+              estimated_delivery_time: be_present
+            }
+          end
         end
       end
     end
@@ -59,7 +53,7 @@ RSpec.describe Package, type: :model do
       empty_delivery_statuses = ['', ' ', nil]
 
       empty_delivery_statuses.each do |empty_delivery_status|
-        it_behaves_like :does_not_create_package do
+        it_behaves_like :does_not_create_record do
           let(:errors) { ['Delivery status is not included in the list'] }
           let(:create_params) { super().merge(delivery_status: empty_delivery_status) }
         end
@@ -83,7 +77,7 @@ RSpec.describe Package, type: :model do
         create(:package)
       end
 
-      it_behaves_like :does_not_create_package do
+      it_behaves_like :does_not_create_record do
         let(:errors) { ['Tracking number has already been taken'] }
       end
     end
@@ -93,33 +87,7 @@ RSpec.describe Package, type: :model do
     subject { package.update(update_params) }
 
     let!(:package) { create(:package) }
-    let(:update_params) { {  } }
-
-    shared_examples :update_package_with_correct_attributes do
-      let(:delivery_status) { 'new' }
-
-      it 'updates Package with correct attributes' do
-        expect { subject }.not_to change { Package.count }
-        expect(package.errors.messages).to be_empty
-        expect(package.reload).to have_attributes(
-          tracking_number: match(/\AYA[0-9]{8}AA\z/),
-          created_at: be_present,
-          updated_at: be_present,
-          id: be_a_kind_of(String),
-          delivery_status: delivery_status,
-          estimated_delivery_time: be_present
-        )
-      end
-    end
-
-    shared_examples :does_not_update_package do
-      let(:errors) { nil }
-
-      it 'does not updates Package' do
-        expect { subject }.not_to change { Package.count }
-        expect(package.errors.full_messages).to match_array(errors)
-      end
-    end
+    let(:update_params) { {} }
 
     shared_examples :does_not_update_package_with_raise_error do
       let(:invalid_delivery_status) { nil }
@@ -132,14 +100,37 @@ RSpec.describe Package, type: :model do
     end
 
     context 'when update Courier' do
-      it_behaves_like :update_package_with_correct_attributes
+      it_behaves_like :update_record_with_correct_attributes do
+        let(:record) { package }
+        let(:record_attributes) do
+          {
+            tracking_number: match(/\AYA[0-9]{8}AA\z/),
+            created_at: be_present,
+            updated_at: be_present,
+            id: be_a_kind_of(String),
+            delivery_status: 'new',
+            estimated_delivery_time: be_present
+          }
+        end
+      end
     end
 
     context 'with valid delivery_statuses' do
       Package.delivery_statuses.each_key do |delivery_status|
-        it_behaves_like :update_package_with_correct_attributes do
+        it_behaves_like :update_record_with_correct_attributes do
+          let(:record) { package }
           let(:delivery_status) { delivery_status }
           let(:update_params) { super().merge(delivery_status: delivery_status) }
+          let(:record_attributes) do
+            {
+              tracking_number: match(/\AYA[0-9]{8}AA\z/),
+              created_at: be_present,
+              updated_at: be_present,
+              id: be_a_kind_of(String),
+              delivery_status: delivery_status,
+              estimated_delivery_time: be_present
+            }
+          end
         end
       end
     end
@@ -148,7 +139,8 @@ RSpec.describe Package, type: :model do
       empty_delivery_statuses = ['', ' ', nil]
 
       empty_delivery_statuses.each do |empty_delivery_status|
-        it_behaves_like :does_not_update_package do
+        it_behaves_like :does_not_update_record do
+          let(:record) { package }
           let(:errors) { ['Delivery status is not included in the list'] }
           let(:update_params) { super().merge(delivery_status: empty_delivery_status) }
         end
@@ -170,7 +162,8 @@ RSpec.describe Package, type: :model do
       let!(:another_package) { create(:package) }
       let(:update_params) { super().merge(tracking_number: another_package.tracking_number) }
 
-      it_behaves_like :does_not_update_package do
+      it_behaves_like :does_not_update_record do
+        let(:record) { package }
         let(:errors) { ['Tracking number has already been taken'] }
       end
     end
@@ -198,5 +191,9 @@ RSpec.describe Package, type: :model do
 
     it { should_not allow_value(nil).for(:tracking_number) }
     it { should allow_value(*Package.delivery_statuses.keys).for(:delivery_status) }
+  end
+
+  describe 'associations' do
+    it { should have_many(:couriers).through(:package_assignments) }
   end
 end

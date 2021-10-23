@@ -1,6 +1,9 @@
 class Package < ApplicationRecord
   before_validation { set_tracking_number }
 
+  has_many :package_assignments
+  has_many :couriers, through: :package_assignments
+
   enum delivery_status: {
     new: 'new',
     processing: 'processing',
