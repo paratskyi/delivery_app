@@ -1,0 +1,1 @@
+class PackagePolicy < BasePolicy; end

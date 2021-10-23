@@ -15,9 +15,6 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
-require 'capybara/rails'
-require 'capybara/rspec'
-
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -73,28 +70,8 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.before(:suite) do
-    # This says that before the entire test suite runs, clear the test database out completely.
-    # This gets rid of any garbage left over from interrupted or poorly-written tests - a common source of surprising test behavior.
-    DatabaseCleaner.clean_with(:truncation)
-
-    # This part sets the default database cleaning strategy to be transactions.
-    # Transactions are very fast, and for all the tests where they do work - that is, any test where the entire test runs in the RSpec process - they are preferable.
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  # These lines hook up database_cleaner around the beginning and end of each test,
-  # telling it to execute whatever cleanup strategy we selected beforehand.
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-
   config.include Devise::Test::IntegrationHelpers, type: :system
   config.include Devise::Test::IntegrationHelpers, type: :request
 end
 
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
