@@ -1,0 +1,1 @@
+class AssignmentError < StandardError; end

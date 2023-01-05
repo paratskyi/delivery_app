@@ -31,7 +31,8 @@ CREATE TYPE public.delivery_status AS ENUM (
     'new',
     'processing',
     'delivered',
-    'cancelled'
+    'cancelled',
+    'assigned'
 );
 
 
@@ -314,6 +315,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210925120140'),
 ('20210925120143'),
 ('20211009115506'),
-('20211009121439');
+('20211009121439'),
+('20211022171857');
 
 

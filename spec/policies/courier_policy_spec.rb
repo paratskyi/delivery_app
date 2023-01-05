@@ -7,7 +7,7 @@ RSpec.describe CourierPolicy do
   let(:delivery_manager) { create(:delivery_manager, delivery_manager_params) }
   let(:delivery_manager_params) { nil }
 
-  context 'when delivery_manager is enabled' do
+  context 'when delivery_manager is disabled' do
     let(:delivery_manager_params) { { enabled: false } }
 
     it { should_not permit(:show) }
@@ -18,7 +18,7 @@ RSpec.describe CourierPolicy do
     it { should_not permit(:destroy) }
   end
 
-  context 'when delivery_manager is disabled' do
+  context 'when delivery_manager is enabled' do
     it { should permit(:show) }
     it { should permit(:create) }
     it { should permit(:new) }

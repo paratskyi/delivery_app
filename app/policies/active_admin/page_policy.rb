@@ -13,5 +13,9 @@ module ActiveAdmin
     def show?
       true
     end
+
+    def assign_couriers_to_package?
+      true
+    end
   end
 end
